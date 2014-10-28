@@ -2,15 +2,12 @@
   (:import (clojure.lang ExceptionInfo))
   (:require [clojure.test :refer :all]
             [bifrost.core :refer :all]
-            [slingshot.slingshot :refer [try+]]
-            [environ.core :refer [env]]))
-
-(def baseurl (env :asgard-url))
+            [slingshot.slingshot :refer [try+]]))
 
 (deftest get-applications
   (testing "Get application list"
     (try
-      (applications baseurl)
+      (applications)
       (assert true)
       (catch ExceptionInfo e
         (prn e)
@@ -19,9 +16,9 @@
 (deftest get-applications-info
   (testing "Get all application info"
     (try
-      (into {} (map (fn [appname] [appname (application baseurl appname)])
+      (into {} (map (fn [appname] [appname (application appname)])
                     (map #(% :name)
-                         [(first (applications baseurl))])))
+                         [(first (applications))])))
       (catch ExceptionInfo e
         (prn e)
         (assert false)))))
@@ -29,9 +26,8 @@
 (deftest get-instance
   (testing "Get an instance info"
     (try
-      (let [app (application baseurl ((first (applications baseurl)) :name))]
-        (instances baseurl "us-west-2"
-                   ((first
+      (let [app (application ((first (applications)) :name))]
+        (instances ((first
                       ((first (app :groups)) :instances)) :instanceId)))
       (catch ExceptionInfo e
         (prn e)
@@ -40,8 +36,8 @@
 (deftest get-instances-by-app
   (testing "Get instances by app dict"
     (try
-      (let [app (application baseurl ((first (applications baseurl)) :name))]
-        (instances-in-app baseurl "us-west-2" app))
+      (let [app (application ((first (applications)) :name))]
+        (instances-in-app app))
       (catch ExceptionInfo e
         (prn e)
         (assert false)))))

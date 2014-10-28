@@ -8,5 +8,4 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [clj-http "1.0.0"]
                  [slingshot "0.12.1"]
-                 [environ "1.0.0"]]
-  :plugins [[lein-environ "1.0.0"]])
+                 [confijulate "0.4.1"]])
